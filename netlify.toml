@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"
+  MEALWEEK_ENABLE_UPSTREAM = "false"
+
+# Netlify automatically detects Next.js and supplies its official adapter.
+# Health records stay in each visitor's localStorage, not in Netlify Functions.

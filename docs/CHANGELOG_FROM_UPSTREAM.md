@@ -9,3 +9,7 @@
 新增：src/components/mealweek/MealWeek.tsx、mealweek.css（四页面与本地交互）；src/lib/mealweek.ts（模型、计算、偏好过滤、演示）；tests/、playwright.config.ts；MealWeek README、THIRD_PARTY_NOTICES、docs 内本轮交付文档与截图。
 
 没有在 MVP 内复用上游认证、食品库、SQLite 日记、AI 解析或 Recharts 图表作为已交付能力；这些源码保留，默认不对外开放。
+
+## 后续迭代：文字与语音辅助
+
+新增 FoodInputHelper.tsx、food-input.css、food-text.ts 及测试：AI/人工双入口、浏览器语音转文字、语音数量改写、通用食物参考表估算与审核预填。AI 接口选型暂停；没有提交或启用任何真实模型 API。固定模拟入口移到独立演示折叠区。

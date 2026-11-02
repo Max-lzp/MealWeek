@@ -24,14 +24,15 @@ test("照片、审核、幂等、运动、日估算、周报、偏好、刷新�
     ctx.fillRect(0, 0, 200, 200);
     return c.toDataURL("image/png").split(",")[1];
   });
-  await page
-    .getByLabel("上传食物照片")
-    .setInputFiles({
-      name: "meal.png",
-      mimeType: "image/png",
-      buffer: Buffer.from(image, "base64"),
-    });
+  await page.getByLabel("上传食物照片").setInputFiles({
+    name: "meal.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(image, "base64"),
+  });
   await expect(page.getByAltText("待确认餐食照片")).toBeVisible();
+  await page
+    .getByText("仅供演示：固定模拟结果（不分析照片）", { exact: true })
+    .click();
   await page
     .getByRole("button", { name: "模拟识别 · 非真实图片识别", exact: true })
     .click();

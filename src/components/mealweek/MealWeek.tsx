@@ -45,6 +45,7 @@ import {
   validNumber,
   validateFood,
 } from "@/lib/mealweek";
+import FoodInputHelper from "./FoodInputHelper";
 import "./mealweek.css";
 type Tab = "今日" | "添加" | "周报" | "我的";
 const slots = ["早餐", "午餐", "晚餐", "加餐"];
@@ -660,6 +661,15 @@ export default function MealWeek() {
         )}
         {tab === "添加" && draft && (
           <form onSubmit={saveFood} className="add-form">
+            <FoodInputHelper
+              key={draft.id}
+              onApply={(fields) => {
+                setDraft((d) => (d ? { ...d, ...fields } : d));
+                setMessage(
+                  "文字参考估算已填入，请核对名称、份量与热量，确认后才入账。",
+                );
+              }}
+            />
             <div className="photo-upload">
               {draft.photo ? (
                 <>
@@ -730,7 +740,7 @@ export default function MealWeek() {
                 食物名称
                 <input
                   required
-                  maxLength={80}
+                  maxLength={500}
                   placeholder="例如：鸡肉蔬菜饭"
                   value={draft.name}
                   onChange={(e) => setDraft({ ...draft, name: e.target.value })}
@@ -740,7 +750,7 @@ export default function MealWeek() {
                 份量
                 <input
                   required
-                  maxLength={80}
+                  maxLength={500}
                   placeholder="例如：1 碗 / 约 300 克"
                   value={draft.portion}
                   onChange={(e) =>
@@ -795,6 +805,7 @@ export default function MealWeek() {
                     "手动估计",
                     "营养标签",
                     "用户确认的数据源",
+                    "内置参考表估算（非AI）",
                     "模拟识别（演示）",
                     "演示数据",
                   ].map((x) => (
@@ -807,29 +818,32 @@ export default function MealWeek() {
                   演示结果，非真实图片识别。请逐项核对并更正。
                 </div>
               )}
-              <button
-                type="button"
-                className="secondary full"
-                onClick={() => {
-                  if (
-                    confirm(
-                      "填入固定演示结果？这不分析照片，也不是真实图片识别。",
-                    )
-                  ) {
-                    setDraft({
-                      ...draft,
-                      name: "鸡肉蔬菜饭（请审核）",
-                      portion: "1 碗，约 350 克",
-                      low: 550,
-                      high: 750,
-                      source: "模拟识别（演示）",
-                    });
-                  }
-                }}
-              >
-                <Sparkles size={16} />
-                模拟识别 · 非真实图片识别
-              </button>
+              <details className="mock-details">
+                <summary>仅供演示：固定模拟结果（不分析照片）</summary>
+                <button
+                  type="button"
+                  className="secondary full"
+                  onClick={() => {
+                    if (
+                      confirm(
+                        "填入固定演示结果？这不分析照片，也不是真实图片识别。",
+                      )
+                    ) {
+                      setDraft({
+                        ...draft,
+                        name: "鸡肉蔬菜饭（请审核）",
+                        portion: "1 碗，约 350 克",
+                        low: 550,
+                        high: 750,
+                        source: "模拟识别（演示）",
+                      });
+                    }
+                  }}
+                >
+                  <Sparkles size={16} />
+                  模拟识别 · 非真实图片识别
+                </button>
+              </details>
             </div>
             <div className="review-note">
               <Check size={18} />
@@ -1257,7 +1271,11 @@ export default function MealWeek() {
                 MealWeek 中文流程、计算、本地记录与偏好：Max 的产品实验，Codex
                 协助实现。
               </p>
-              <p>无真实 AI 识别 · 无云同步 · 无医疗建议</p>
+              <p>
+                AI 模型选型中 · 未接入 API
+                <br />
+                文字参考估算非 AI · 无云同步 · 无医疗建议
+              </p>
             </div>
           </>
         )}
